@@ -1,0 +1,30 @@
+[Unit]
+Description=Weather App (Flask + Gunicorn)
+After=network.target
+
+[Service]
+# Replace `youruser` with the system user that should run the app
+User=youruser
+Group=www-data
+
+# Working directory of the app (replace with the absolute path on the server)
+WorkingDirectory=/path/to/weather-app
+
+# Optional: load environment variables from a file (absolute path recommended)
+# File must contain KEY=VALUE lines (no spaces around =)
+EnvironmentFile=/path/to/weather-app/.env
+
+# Use the venv Python and gunicorn installed in it
+ExecStart=/path/to/weather-app/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app
+
+# Restart on failure
+Restart=always
+RestartSec=5
+
+# Logging
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=weather-app
+
+[Install]
+WantedBy=multi-user.target
